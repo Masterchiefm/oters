@@ -36,12 +36,12 @@ def locateip(ip):
     import requests
     requests.packages.urllib3.disable_warnings() 
     
-    proxy = 'chief:9281038qwas!@112.74.105.83:2053'
+    proxy = 'chief:passwd@112.74.105.83:2053'
     proxies = {
     'http': 'http://' + proxy,
     'https': 'https://' + proxy,
 }
-    #proxies={'http':'chief:9281038qwas!@112.74.105.83:2053','https':'chief:9281038qwas!@112.74.105.83:2053'}
+    #proxies={'http':'chief:passwd@112.74.105.83:2053','https':'chief:passwd@112.74.105.83:2053'}
     
     i = 0
     while i < 3:
