@@ -234,8 +234,9 @@ def aria2_tellActive():
         #print(complet_lenth)
         #print(total_lenth)
         if total_lenth == complet_lenth:
-            print(directory,'download complet')
-            downloads[directory]=gid
+            if (int(complet_lenth) > 536870912):
+                print(directory,'download complet')
+                downloads[directory]=gid
         else:
             print(directory,'downloading')
     return downloads
