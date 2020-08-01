@@ -16,6 +16,8 @@ if rpc == '':
     
 token=input('Please input token:\n')
 token='token:'+token.strip()
+global path
+path = input('input path:\n')
 # In[ ]:
 
 
@@ -38,12 +40,12 @@ def rpc_download_url(url,path,title):
 import os
 
 # 下载部分，下载网页或者图片
-def download(url,proxies,Type):
+def download(url,Type):
     content = ''
     t = 0
     while t < 3:
         try:
-            content = get(url,proxies=proxies,timeout=20)
+            content = get(url,timeout=20)
             if Type == '':
                 pass
             else:
@@ -62,11 +64,6 @@ def download(url,proxies,Type):
 # In[3]:
 
 
-# 获取代理信息
-def get_proxies():
-    hproxy=input("输入http代理地址及端口，例如127.0.0.1：10809:\n")
-    proxies={'http':hproxy,'https':hproxy}
-    return proxies
 
 
 
@@ -126,7 +123,7 @@ def get_page_info():
             i = i + 1
             file_path = path + "/" + title + "/" + str(i) + '.jpg'
             #print ("getting page ",head)
-            picture = download(pic,proxies,file_path)
+            picture = download(pic,file_path)
             
             creat_file(title,magnet,path)
             
@@ -256,10 +253,6 @@ def menu():
     print('''--------------------------------''')
     opt = str(input ('输入选项：'))
     if opt == '1':
-        global proxies
-        global path
-        path = input('input path:\n')
-        proxies = get_proxies()
         get_page_info()
     elif opt == '2':
         aria2_tellActive()
@@ -319,4 +312,3 @@ if __name__ == "__main__":
     a=1
     while a:
         a = menu()
-
