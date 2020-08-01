@@ -21,7 +21,7 @@ path = input('input path:\n')
 # In[ ]:
 
 
-def rpc_download_url(url,path,title):
+def aria2_addUri(url,path,title):
     Dir = path + "/" + title
     '''输入下载链接或者Magnet链接，然后添加下载任务。'''
     jsonreq=json.dumps({'jsonrpc':'2.0',
@@ -115,25 +115,19 @@ def get_page_info():
                 r = rest.find('''<''')
                 magnet = rest[:r]
                 print(magnet)
+                creat_file(title,magnet,path)
             #print(pics)
                 
         i = 0
         print('共',len(pics),'图')
+        
         for pic in pics:
             i = i + 1
-            file_path = path + "/" + title + "/" + str(i) + '.jpg'
-            #print ("getting page ",head)
-            picture = download(pic,file_path)
+            print('adding picture')
+            aria2_addUri(pic,path,title)
             
-            creat_file(title,magnet,path)
-            
-            
-            with open(file_path, 'wb') as file:
-                try:
-                    file.write(picture.content)
-                except:
-                    print('pic error')
-        rpc_download_url(magnet,path,title)
+        print('adding file')
+        aria2_addUri(magnet,path,title)
 
 
 # In[ ]:
@@ -186,7 +180,7 @@ foreach($imgs['name'] as $k=>$name)
     index = index + """echo '<br>""" + magnet + "'?>"
 
     index_file = path + '/' + title + "/" + "index.php"
-    #rpc_download_url(magnet,path)
+    
     with open(index_file,'w',encoding = 'utf-8') as w_file:
         for each_line in index:
             w_file.write(each_line)
@@ -235,7 +229,8 @@ def aria2_tellActive():
                 print(directory,'download complet')
                 downloads[directory]=gid
         else:
-            print(directory,'downloading')
+            percent = (int(complet_lenth)/int(total_lenth)) * 100
+            print(directory,'downloading ', int(percent),'%')
     return downloads
 
 
@@ -271,7 +266,6 @@ def menu():
                     pass
                 else:
                     dir = '/' + dir
-                
                 print('---------------------------------------------------')
                 print('Preparing to upload ',dir)
                 cmd = 'rclone move '  + dir + ' gdrive:' + dir + ' -P'
@@ -289,7 +283,7 @@ def menu():
         folder = input('input saving folder:\n')
         
         url = input('input url/magnet:\n')
-        rpc_download_url(url,path,folder)
+        aria2_addUri(url,path,folder)
     elif opt == '0':
         return 0 
     else:
