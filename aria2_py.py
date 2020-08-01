@@ -86,7 +86,7 @@ def get_page_info():
     for url in urls:
         pics = []
         magnet = ''
-        for line in (download(url,proxies,'').content.decode('utf-8').splitlines()):
+        for line in (download(url,'').content.decode('utf-8').splitlines()):
             # 标题
             if '<meta name="keywords" content=' in line:
                 l = line.find("content=") + 9
@@ -285,7 +285,7 @@ def menu():
     elif opt == '4':
         path = input('input saving path:\n')
         folder = input('input saving folder:\n')
-        proxies = get_proxies()
+        
         url = input('input url/magnet:\n')
         rpc_download_url(url,path,folder)
     elif opt == '0':
