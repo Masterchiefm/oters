@@ -272,6 +272,8 @@ def menu():
                 else:
                     dir = '/' + dir
                 
+                print('---------------------------------------------------')
+                print('Preparing to upload ',dir)
                 cmd = 'rclone move '  + dir + ' gdrive:' + dir + ' -P'
                 sleep(60)
                 os.system(cmd)
