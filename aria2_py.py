@@ -281,7 +281,7 @@ def menu():
                 aria2_remove(file[key])
                 #os.system(cmd2)
                 
-            sleep(10)
+            sleep(30)
     elif opt == '4':
         path = input('input saving path:\n')
         folder = input('input saving folder:\n')
