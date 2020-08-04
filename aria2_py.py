@@ -25,7 +25,7 @@ def aria2_addUri(url,path,title):
     Dir = path + "/" + title
     '''输入下载链接或者Magnet链接，然后添加下载任务。'''
     jsonreq=json.dumps({'jsonrpc':'2.0',
-                'id':'1',
+                'id':'addUri',
                    'method' : 'aria2.addUri',
                    'params':[token,[url],{"dir":Dir}]})
     #print(jsonreq)
@@ -190,7 +190,7 @@ foreach($imgs['name'] as $k=>$name)
 
 
 def aria2_remove(gid):
-    jsonreq = json.dumps({'jsonrpc':'2.0', 'id':'qwer',
+    jsonreq = json.dumps({'jsonrpc':'2.0', 'id':'remove',
                           'method':'aria2.remove',
                           'params':[token,gid]})
     c=requests.post(rpc,data=jsonreq)
@@ -226,11 +226,11 @@ def aria2_tellActive():
         #print(total_lenth)
         if total_lenth == complet_lenth:
             if (int(complet_lenth) > 536870912):
-                print(directory,'download complet')
+                print('@',directory,'download complet')
                 downloads[directory]=gid
         else:
             percent = (int(complet_lenth)/int(total_lenth)) * 100
-            print(directory,'downloading ', int(percent),'%')
+            print( int(percent),'%',directory)
     return downloads
 
 
@@ -252,6 +252,7 @@ def menu():
     elif opt == '2':
         aria2_tellActive()
     elif opt == '3':
+        count = 0
         while True:
             from time import sleep
             
@@ -278,6 +279,12 @@ def menu():
                 #os.system(cmd2)
                 
             sleep(30)
+            count = count + 1
+            if count == 10:
+                count = 0
+                os.system("""rclone sync gdrive:/ bcgdrive:/ -P""")
+                os.system("""rclone sync gdrive:/ hell:/ -P""")
+                
     elif opt == '4':
         path = input('input saving path:\n')
         folder = input('input saving folder:\n')
