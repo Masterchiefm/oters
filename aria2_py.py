@@ -235,7 +235,8 @@ def aria2_tellActive():
             if (int(complet_lenth) > 536870912):
                 print('@',directory,'download complet')
                 downloads[directory]=gid
-                os.system(touchcmd)
+                if rpc == 'http://127.0.0.1:6800/jsonrpc':
+                    os.system(touchcmd)
       
                 
         else:
@@ -279,10 +280,13 @@ def menu():
                     dir = '/' + dir
                 print('---------------------------------------------------')
                 print('Preparing to upload ',dir)
-                log=path + '/' + 'log'
-                f = open(log,'a')
-                f.write(str(directory))
-                f.close
+                
+                if rpc == 'http://127.0.0.1:6800/jsonrpc':
+                    log=path + '/' + 'log'
+                    f = open(log,'a')
+                    f.write(str(directory))
+                    f.close
+                    
                 cmd = 'rclone move '  + dir + ' gdrive:' + dir + ' -P'
                 sleep(60)
                 os.system(cmd)
