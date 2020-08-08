@@ -248,7 +248,7 @@ def aria2_tellActive():
 # In[ ]:
 
 
-def menu():
+def menu(path):
     
     print('''-----------自动下片机------------''')
     print('''- 1. 添加se网址链接''')
@@ -284,7 +284,7 @@ def menu():
                 if rpc == 'http://127.0.0.1:6800/jsonrpc':
                     log=path + '/' + 'log'
                     f = open(log,'a')
-                    f.write(str(directory))
+                    f.write(str(dir))
                     f.close
                     
                 cmd = 'rclone move '  + dir + ' gdrive:' + dir + ' -P'
@@ -332,4 +332,4 @@ def menu():
 if __name__ == "__main__":
     a=1
     while a:
-        a = menu()
+        a = menu(path)
