@@ -4,8 +4,9 @@
 # In[ ]:
 
 
-import json, requests, os,re
+import json, requests, os,re,urllib
 from requests import get
+from time import sleep
 
 global token
 
@@ -81,9 +82,14 @@ def addReadme(gid):
     c = requests.post(rpc,data=jsonreq)
     d=c.json()
     e = d['result']
+    print(e)
     Dir  = re.search(r"path\': \'/.*?\.jpg",str(e))
     #print('1',Dir)
-    Dir = Dir.group(0)
+    print(Dir)
+    try:
+        Dir = Dir.group()
+    except:
+        print('eee')
     Dir = (Dir).replace("path': '",'')
     newDir = urllib.parse.quote(Dir)
     md = "\n![](" + newDir + ")"
@@ -149,6 +155,7 @@ def get_page_info():
             print('adding picture')
             result = aria2_addUri(pic,path,title)
             gid = result['result']
+            sleep(5)
             md = addReadme(gid)
             mds.append(md)
             
