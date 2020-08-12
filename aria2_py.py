@@ -85,7 +85,7 @@ def addReadme(gid):
     print(e)
     Dir  = re.search(r"path\': \'/.*?\.jpg",str(e))
     #print('1',Dir)
-    print(Dir)
+    #print(Dir)
     try:
         Dir = Dir.group()
     except:
@@ -155,7 +155,7 @@ def get_page_info():
             print('adding picture')
             result = aria2_addUri(pic,path,title)
             gid = result['result']
-            sleep(5)
+            sleep(4)
             md = addReadme(gid)
             mds.append(md)
             
