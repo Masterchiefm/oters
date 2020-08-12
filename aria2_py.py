@@ -86,12 +86,14 @@ def addReadme(gid):
     Dir  = re.search(r"path\': \'/.*?\.jpg",str(e))
     #print('1',Dir)
     #print(Dir)
+    newDir = ''
     try:
         Dir = Dir.group()
+        Dir = (Dir).replace("path': '",'')
+        newDir = urllib.parse.quote(Dir)
     except:
         print('eee')
-    Dir = (Dir).replace("path': '",'')
-    newDir = urllib.parse.quote(Dir)
+    
     md = "\n![](" + newDir + ")"
     return md
 
@@ -149,16 +151,21 @@ def get_page_info():
                 
         i = 0
         print('共',len(pics),'图')
-        
         for pic in pics:
             i = i + 1
-            print('adding picture')
-            result = aria2_addUri(pic,path,title)
-            gid = result['result']
-            sleep(4)
-            md = addReadme(gid)
+            file_path = path + "/" + title + "/" + str(i) + '.jpg'
+            ndir = urllib.parse.quote(file_path)
+            md = "\n![](" + ndir  + ")"
             mds.append(md)
+            #print ("getting page ",head)
+            picture = download(pic,file_path)
             
+            with open(file_path, 'wb') as file:
+                try:
+                    file.write(picture.content)
+                except:
+                    print('pic error')
+
             
         print('adding file')
         aria2_addUri(magnet,path,title)
@@ -285,6 +292,10 @@ def menu(path):
                 cmd = 'rclone move '  + dir + ' gdrive:' + dir + ' -P'
                 sleep(60)
                 os.system(cmd)
+                log = open('/tmp/uploadlog','a')
+                log.write(dir+'\n')
+                log.close
+                
                 
                 
                 
