@@ -37,7 +37,8 @@ def aria2_addUri(url,path,title):
                    'params':[token,[url],{"dir":Dir}]})
     #print(jsonreq)
     c=requests.post(rpc,data=jsonreq)
-    print(c.content)
+    result = c.json()
+    return result
 
 
 # In[ ]:
@@ -72,7 +73,21 @@ def download(url,Type):
 
 
 
-
+# 获取图片md链接
+def addReadme(gid):
+    jsonreq = json.dumps({'jsonrpc':'2.0', 'id':'qwer',
+                          'method':'aria2.getFiles',
+                          'params':[token,gid]})
+    c = requests.post(rpc,data=jsonreq)
+    d=c.json()
+    e = d['result']
+    Dir  = re.search(r"path\': \'/.*?\.jpg",str(e))
+    #print('1',Dir)
+    Dir = Dir.group(0)
+    Dir = (Dir).replace("path': '",'')
+    newDir = urllib.parse.quote(Dir)
+    md = "\n![](" + newDir + ")"
+    return md
 
 # 获取分页数以及每个分页的链接,然后
 def get_page_info():
@@ -92,6 +107,7 @@ def get_page_info():
         
     for url in urls:
         pics = []
+        mds = []
         magnet = ''
         for line in (download(url,'').content.decode('utf-8').splitlines()):
             # 标题
@@ -122,7 +138,7 @@ def get_page_info():
                 r = rest.find('''<''')
                 magnet = rest[:r]
                 print(magnet)
-                creat_file(title,magnet,path)
+                
             #print(pics)
                 
         i = 0
@@ -131,62 +147,34 @@ def get_page_info():
         for pic in pics:
             i = i + 1
             print('adding picture')
-            aria2_addUri(pic,path,title)
+            result = aria2_addUri(pic,path,title)
+            gid = result['result']
+            md = addReadme(gid)
+            mds.append(md)
+            
             
         print('adding file')
         aria2_addUri(magnet,path,title)
+        creat_file(title,magnet,path,mds)
+        
 
 
 # In[ ]:
 
 
-def creat_file(title,magnet,path):
+def creat_file(title,magnet,path,mds):
     if not os.path.exists(str(path)):
         os.makedirs(str(path))   
         #创建页文件夹下的分文件夹
     if not os.path.exists((path) + "/" + title):
         os.makedirs((path) + "/" +  title)
         
-    index = """  <?php
-function fileShow($dir, &$fileArr=array()){ 
-    $handle = opendir('./');
-    while($file = readdir($handle)){
-        if($file !== '..' && $file !== '.'){
-            $f = $dir.'/'.$file;
-            if(is_file($f)){
-                {
-                $temp = explode('.',$file); 
-                $fileArr['type'][] = $temp[1]; 
-                //$fileArr['name']保存图片名称
-                $fileArr['name'][] = $temp[0];       
-                  
-                //$fileArr['path']保存图片路径       
-                $fileArr['path'][] = $dir.'/'.$file;
-}
-            }
-            else{
-                fileShow($f, $fileArr);
-            }
-        }  
-    }
-    return $fileArr;
-}
- 
-$imgs = fileShow('./'); //$一个文件夹目录，目录内是jpg图片
+    index = """bt: """ 
+    index = index + magnet + '\n'
+    for md in mds:
+        index = index + md
 
-asort($imgs['name'], 1);         //保持索引关系把值按数字处理进行升序
-foreach($imgs['name'] as $k=>$name)
-{
-    if( $imgs['type'][$k] == 'jpg'){
-    echo $name.$imgs['type'][$k].'<br />';
-    echo '<img style="width:1000px;" src="'.$imgs['path'][$k].'" />';
-}
-}
-
-    """ 
-    index = index + """echo '<br>""" + magnet + "'?>"
-
-    index_file = path + '/' + title + "/" + "index.php"
+    index_file = path + '/' + title + "/" + "README.md"
     
     with open(index_file,'w',encoding = 'utf-8') as w_file:
         for each_line in index:
