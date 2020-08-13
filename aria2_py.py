@@ -159,7 +159,11 @@ def get_page_info():
             mds.append(md)
             #print ("getting page ",head)
             picture = download(pic,file_path)
-            
+            if not os.path.exists(str(path)):
+                os.makedirs(str(path))   
+                #创建页文件夹下的分文件夹
+            if not os.path.exists((path) + "/" + title):
+                os.makedirs((path) + "/" +  title)
             with open(file_path, 'wb') as file:
                 try:
                     file.write(picture.content)
