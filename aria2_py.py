@@ -23,8 +23,7 @@ if path[0]=='/':
     pass
 else:
     path='/'+path
-global touchcmd
-touchcmd = 'touch ' + path + '/log'
+
 
 # In[ ]:
 
@@ -241,8 +240,7 @@ def aria2_tellActive():
             if (int(complet_lenth) > 536870912):
                 print('@',directory,'download complet')
                 downloads[directory]=gid
-                if rpc == 'http://127.0.0.1:6800/jsonrpc':
-                    os.system(touchcmd)
+                
       
                 
         else:
