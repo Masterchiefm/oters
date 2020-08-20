@@ -285,11 +285,7 @@ def menu(path):
                 print('---------------------------------------------------')
                 print('Preparing to upload ',dir)
                 
-                if rpc == 'http://127.0.0.1:6800/jsonrpc':
-                    log=path + '/' + 'log'
-                    f = open(log,'a')
-                    f.write(str(dir))
-                    f.close
+                
                     
                 cmd = 'rclone move '  + dir + ' gdrive:' + dir + ' -P'
                 sleep(60)
