@@ -19,6 +19,10 @@ token=input('Please input token:\n')
 token='token:'+token.strip()
 global path
 path = input('input path:\n')
+if path[0]:
+    pass
+else:
+    path='/tmp'
 if path[0]=='/':
     pass
 else:
@@ -304,8 +308,9 @@ def menu(path):
             count = count + 1
             if count == 10:
                 count = 0
-                os.system("""rclone sync gdrive:/ bcgdrive:/ -P""")
-                os.system("""rclone sync gdrive:/ hell:/ -P""")
+                print("sync other clouds")
+                #os.system("""rclone sync gdrive:/ bcgdrive:/ -P""")
+                #os.system("""rclone sync gdrive:/ hell:/ -P""")
                 
     elif opt == '4':
         path = input('input saving path:\n')
