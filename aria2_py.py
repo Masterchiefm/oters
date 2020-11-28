@@ -291,8 +291,10 @@ def menu(path):
                 
                 
                     
-                cmd = 'rclone move '  + dir + ' gdrive:' + dir + ' -P'
-                sleep(60)
+                cmd0 = 'rclone copy '  + dir + ' gdrive:' + dir + ' -P'
+                cmd = 'rclone move '  + dir + ' bcgdrive:' + dir + ' -P'
+                sleep(30)
+                os.system(cmd0)
                 os.system(cmd)
                 log = open('/tmp/uploadlog','a')
                 log.write(dir+'\n')
@@ -310,7 +312,7 @@ def menu(path):
                 count = 0
                 print("sync other clouds")
                 #os.system("""rclone sync gdrive:/ bcgdrive:/ -P""")
-                #os.system("""rclone sync gdrive:/ hell:/ -P""")
+                os.system("""rclone copy gdrive:/ hell:/ -P""")
                 
     elif opt == '4':
         path = input('input saving path:\n')
